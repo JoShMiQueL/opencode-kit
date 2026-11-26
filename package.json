@@ -1,7 +1,7 @@
 {
   "name": "opencode-kit",
-  "version": "1.0.0",
-  "description": "Per-project agentic kit for opencode — cost-aware routing over the opencode-devin plugin (provider devin/*). 7 agents, 3 slash-commands, REPORT contract.",
+  "version": "1.1.0",
+  "description": "Per-project agentic kit for opencode — cost-aware routing over the opencode-devin plugin (provider devin/*). Seven agents, three slash-commands, REPORT contract.",
   "type": "module",
   "bin": {
     "opencode-kit": "./install.mjs"
@@ -11,8 +11,14 @@
     "commands/",
     "install.mjs",
     "install.sh",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
+  "scripts": {
+    "test": "node scripts/validate-agents.mjs && node scripts/test-install.mjs",
+    "validate": "node scripts/validate-agents.mjs",
+    "smoke": "node scripts/test-install.mjs"
+  },
   "keywords": [
     "opencode",
     "opencode-devin",
@@ -22,14 +28,15 @@
     "orchestrator",
     "subagents",
     "ai",
-    "coding"
+    "coding",
+    "agentic"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JoShMiQueL/opencode-kit.git"
   },
   "bugs": "https://github.com/JoShMiQueL/opencode-kit/issues",
-  "homepage": "https://github.com/JoShMiQueL/opencode-kit",
+  "homepage": "https://github.com/JoShMiQueL/opencode-kit#readme",
   "license": "MIT",
   "author": "JoShMiQueL",
   "engines": {

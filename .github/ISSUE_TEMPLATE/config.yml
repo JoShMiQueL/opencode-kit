@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: opencode-devin plugin
+    url: https://github.com/JoShMiQueL/opencode-devin/issues
+    about: Problems connecting Devin to opencode (/connect, credentials, catalog) belong to the plugin, not this kit.
