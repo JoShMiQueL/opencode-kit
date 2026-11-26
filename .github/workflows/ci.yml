@@ -32,3 +32,16 @@ jobs:
 
       - name: CLI help works
         run: node install.mjs --help
+
+      - name: Bash shim parses
+        run: bash -n install.sh
+
+      - name: PowerShell shim runs
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./install.ps1 -Version
+
+      - name: cmd shim runs
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: install.cmd --version

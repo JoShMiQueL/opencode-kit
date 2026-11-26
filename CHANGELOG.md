@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-26
+
+### Added
+
+- One-liner bootstraps for every shell: `install.ps1` (`irm ... | iex`),
+  `install.cmd` (`curl ... && install.cmd`) and `install.sh`
+  (`curl ... | bash`). All three are thin shims over `install.mjs` — they run
+  the local copy when present and fall back to `npx` otherwise.
+- `install.ps1` never calls `exit` when piped into `iex`, so it cannot close
+  the caller's interactive session.
+- CI now syntax-checks the bash shim and smoke-tests the PowerShell and
+  cmd shims on Windows.
+
 ## [1.1.0] - 2026-11-26
 
 ### Added
@@ -48,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   `reviewer`, `scout`, `librarian`, `tester`), three slash commands
   (`implement`, `plan-work`, `research`) and a per-project installer.
 
-[Unreleased]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/JoShMiQueL/opencode-kit/releases/tag/v1.0.0

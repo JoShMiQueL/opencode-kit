@@ -64,6 +64,46 @@ npx -y github:JoShMiQueL/opencode-kit ~/dev/my-project
 
 Once published to npm, `npx opencode-kit` works the same way.
 
+### One-liner bootstrap
+
+If you would rather not type `npx`, each shell has a shim that downloads and
+runs the installer. All three are thin wrappers — the real logic lives in
+`install.mjs`.
+
+**PowerShell**
+
+```powershell
+irm https://raw.githubusercontent.com/JoShMiQueL/opencode-kit/main/install.ps1 | iex
+```
+
+**cmd.exe**
+
+```cmd
+curl -fsSL https://raw.githubusercontent.com/JoShMiQueL/opencode-kit/main/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+**bash / zsh**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JoShMiQueL/opencode-kit/main/install.sh | bash
+```
+
+Piped one-liners always install into the **current directory** and cannot take
+flags. To pass a target or `--dry-run` / `--check` / `--prune`, download the
+shim first and run it:
+
+```powershell
+.\install.ps1 C:\dev\my-project -DryRun
+```
+
+```bash
+bash install.sh ~/dev/my-project --check
+```
+
+> Piping a remote script into your shell executes whatever the server sends.
+> If that bothers you — and it reasonably might — use `npx` or clone the repo
+> and run `node install.mjs` instead.
+
 Then open the project:
 
 ```bash

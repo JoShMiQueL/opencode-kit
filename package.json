@@ -1,6 +1,6 @@
 {
   "name": "opencode-kit",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Per-project agentic kit for opencode — cost-aware routing over the opencode-devin plugin (provider devin/*). Seven agents, three slash-commands, REPORT contract.",
   "type": "module",
   "bin": {
@@ -11,6 +11,8 @@
     "commands/",
     "install.mjs",
     "install.sh",
+    "install.ps1",
+    "install.cmd",
     "README.md",
     "LICENSE"
   ],

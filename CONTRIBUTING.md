@@ -20,7 +20,9 @@ install.sh         thin bash wrapper around install.mjs
 ```
 
 `install.sh` must never grow logic. If behaviour changes, it changes in
-`install.mjs`.
+`install.mjs`. The same rule applies to `install.ps1` and `install.cmd` — they
+exist only to bootstrap `install.mjs` for shells that cannot call `npx`
+conveniently.
 
 ## Lane policy — non-negotiable
 
