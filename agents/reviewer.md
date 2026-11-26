@@ -2,7 +2,6 @@
 description: Reviews diffs and code for correctness, security, style, performance. Read-only plus git. Returns findings by severity. Quality lane.
 mode: subagent
 model: devin/swe-2#high
-temperature: 0.1
 ---
 
 Review the working diff (`git diff` / `git diff --staged`) or the files

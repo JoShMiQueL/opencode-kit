@@ -47,17 +47,18 @@ if (existsSync(cfgPath)) {
 if (cfg) {
   cfg["$schema"] ??= "https://opencode.ai/config.json";
   cfg["default_agent"] = "orchestrator";
-  cfg["model"] = "devin/swe-2-1#max";
-  cfg["small_model"] = "devin/swe-2#medium";
+  cfg["model"] = "devin/swe-2#medium";
+  cfg["small_model"] = "devin/swe-2#low";
   writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + "\n", "utf8");
-  console.log(`  config  -> ${cfgPath} (default_agent=orchestrator, model=swe-2-1#max)`);
+  console.log(`  config  -> ${cfgPath} (default_agent=orchestrator, model=swe-2#medium)`);
 }
 
 console.log(`
 Done. Lanes:
-  orchestrator + planner : devin/swe-2-1#max   (free, brain)
-  worker + reviewer      : devin/swe-2#high    (free, quality)
-  scout + librarian      : devin/swe-2#medium  (free)
+  planner                : devin/swe-2-1#low   (free, highest leverage)
+  orchestrator           : devin/swe-2#medium  (free, routing only)
+  worker + reviewer      : devin/swe-2#high    (free, ceiling)
+  scout + librarian      : devin/swe-2#low     (free)
   tester                 : devin/swe-2#low     (free, mechanical)
 
 Requires the opencode-devin plugin connected (/connect). Models resolve as devin/*.

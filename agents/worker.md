@@ -2,7 +2,6 @@
 description: Implementation specialist - features, fixes, refactors. Receives exact scope, verifies against project commands. Quality lane.
 mode: subagent
 model: devin/swe-2#high
-temperature: 0.2
 ---
 
 You receive a self-contained spec from the orchestrator: Goal, Scope,

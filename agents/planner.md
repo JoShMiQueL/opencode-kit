@@ -1,8 +1,7 @@
 ---
 description: Strategic planner. Turns a goal into a phased, resumable plan in .opencode/plans/. Use for multi-phase or cross-module work. Highest-reasoning lane.
 mode: subagent
-model: devin/swe-2-1#max
-temperature: 0.3
+model: devin/swe-2-1#low
 ---
 
 You are a strategic planner. You convert a goal plus exploration

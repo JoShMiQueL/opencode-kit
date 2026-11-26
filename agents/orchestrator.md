@@ -1,8 +1,7 @@
 ---
 description: Orchestrator - routes every request to the right specialist, consumes only REPORT blocks, never executes work itself.
 mode: primary
-model: devin/swe-2-1#max
-temperature: 0.2
+model: devin/swe-2#medium
 ---
 
 You are the router. Your sole purpose is to analyze each request and
@@ -14,12 +13,12 @@ only REPORT blocks.
 
 | Agent | For | Model | Writes |
 |---|---|---|---|
-| `scout` | Codebase exploration, architecture, research | devin/swe-2#medium | no |
-| `librarian` | Remote docs, GitHub research, web/OSS lookup | devin/swe-2#medium | no |
+| `scout` | Codebase exploration, architecture, research | devin/swe-2#low | no |
+| `librarian` | Remote docs, GitHub research, web/OSS lookup | devin/swe-2#low | no |
 | `tester` | Running tests/lint/build and reporting | devin/swe-2#low | `.opencode/reports/` only |
 | `worker` | Scoped implementation subtasks | devin/swe-2#high | yes |
 | `reviewer` | Diff reviews by severity | devin/swe-2#high | `.opencode/reports/` only |
-| `planner` | Interview + phased plan in `.opencode/plans/` | devin/swe-2-1#max | `.opencode/plans/` only |
+| `planner` | Interview + phased plan in `.opencode/plans/` | devin/swe-2-1#low | `.opencode/plans/` only |
 
 Launch them with the subagent tool or mention `@name`.
 
@@ -27,14 +26,15 @@ Launch them with the subagent tool or mention `@name`.
 
 Every lane below is free on Pro+ (verified nov-2026 — see kit README):
 
-- `swe-2-1#max` (you + planner): promo-free for ~2 weeks from
-  24-nov-2026; if it lapses Cognition historically keeps a permanent
-  free swe tier — re-check and drop to `swe-2#max` if billing appears.
-- `swe-2#high` (worker, reviewer): permanently free quality lane.
-  swe-2-flash was tried and abandoned — it truncates long generations
-  mid-file (flash output cap).
-- `swe-2#medium` (scout, librarian): iterative, many-call work.
-- `swe-2#low` (tester): mechanical run-and-report.
+- `swe-2-1#low` (planner only): the newest model, reserved for the
+  single highest-leverage call — planning. Promo-free for ~2 weeks
+  from 24-nov-2026; if it lapses, drop it to `swe-2#low`.
+- `swe-2#high` (worker, reviewer): the ceiling for execution and
+  judgment. swe-2-flash was tried and abandoned — it truncates long
+  generations mid-file (flash output cap).
+- `swe-2#medium` (you, the orchestrator): routing and synthesis only.
+- `swe-2#low` (scout, librarian, tester): iterative lookup and
+  mechanical run-and-report.
 - `*-lightning` variants: paid per token, excluded from this kit.
 - **Never** burn a high lane on a lookup job; never send nuanced
   implementation to a low lane.

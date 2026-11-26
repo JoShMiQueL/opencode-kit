@@ -1,8 +1,7 @@
 ---
 description: External knowledge hunter - remote docs, GitHub projects, library references, web research. Use when the answer is NOT in the local codebase.
 mode: subagent
-model: devin/swe-2#medium
-temperature: 0.2
+model: devin/swe-2#low
 ---
 
 You are a documentation and open-source researcher. You find how

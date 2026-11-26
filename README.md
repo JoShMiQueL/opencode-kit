@@ -27,12 +27,12 @@ Es idempotente (sobreescribe). Alternativa bash: `./install.sh .`
 
 | Agente | Rol | Lane | Por qué |
 |---|---|---|---|
-| `orchestrator` | primary. Nunca ejecuta, solo delega y consume REPORT blocks | **swe-2-1#max** | free — el cerebro, routing + síntesis |
-| `planner` | planes por fases en `.opencode/plans/` (patrón Prometheus) | swe-2-1#max | free — planificación profunda |
+| `orchestrator` | primary. Nunca ejecuta, solo delega y consume REPORT blocks | **swe-2#medium** | free — routing + síntesis, sin ejecutar |
+| `planner` | planes por fases en `.opencode/plans/` (patrón Prometheus) | swe-2-1#low | free (promo) — única lane con 2.1, mayor leverage |
 | `worker` | implementación completa, verificada | swe-2#high | free permanente — escribe código largo sin cortes |
 | `reviewer` | review de diffs por severidad | swe-2#high | free permanente — juicio |
-| `scout` | exploración read-only del repo, file:line | swe-2#medium | free permanente — iterativo |
-| `librarian` | docs/GitHub/web, mecanismos exactos con URLs | swe-2#medium | free permanente — fetch+extraer |
+| `scout` | exploración read-only del repo, file:line | swe-2#low | free permanente — iterativo |
+| `librarian` | docs/GitHub/web, mecanismos exactos con URLs | swe-2#low | free permanente — fetch+extraer |
 | `tester` | corre tests/lint/build, reporta comprimido | swe-2#low | free permanente — mecánico |
 
 ## Coste: todo Free
@@ -42,6 +42,8 @@ Verificado con `devin models` + r/CognitionLabs + r/DevinAI (nov-2026):
 - **swe-2-1** (todos los efforts): Free — promo de lanzamiento de 2
   semanas desde el 24-nov-2026. Si expira (~8-dic), históricamente
   Cognition siempre deja un tier swe free permanente (swe-2 lo es hoy).
+  El kit solo lo usa en `planner` (la llamada de mayor leverage); si
+  la promo cae, baja planner a `swe-2#low`.
 - **swe-2 / swe-2-flash** (todos los efforts): Free **permanente** en
   Pro/Max/Teams — lo confirma el anuncio del plan Teams ("free sessions
   powered by SWE-2") y los threads de Reddit post-promo.
