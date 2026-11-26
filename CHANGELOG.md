@@ -6,6 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-26
+
+### Added
+
+- The installer now maintains a delimited block in the project's `AGENTS.md`
+  (`<!-- opencode-kit:start ... -->` … `<!-- opencode-kit:end -->`) describing
+  the kit, the free lanes, the update command and the "spend expensive lanes
+  last" rule. opencode injects `AGENTS.md` into every session, so any agent —
+  not just the orchestrator — knows how the kit works and how to refresh it.
+- `--no-agents-md` skips that block.
+- `--check` now also reports a missing or stale `AGENTS.md` block.
+- `agents/orchestrator.md` gained a **Kit maintenance** section with the
+  drift-check and sync commands.
+
+### Changed
+
+- The managed block is refreshed on every sync, so its content tracks the
+  installed version instead of drifting.
+
 ## [1.2.0] - 2026-11-26
 
 ### Added
@@ -61,7 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   `reviewer`, `scout`, `librarian`, `tester`), three slash commands
   (`implement`, `plan-work`, `research`) and a per-project installer.
 
-[Unreleased]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/JoShMiQueL/opencode-kit/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/JoShMiQueL/opencode-kit/releases/tag/v1.0.0

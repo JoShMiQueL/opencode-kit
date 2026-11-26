@@ -59,6 +59,17 @@ try {
   check("exit 0", result.status === 0, result.stderr);
   check("nothing written", /0 written/.test(result.stdout), result.stdout.split("\n").slice(-4).join(" | "));
 
+  console.log("AGENTS.md managed block");
+  const agentsPath = join(project, "AGENTS.md");
+  check("block created", /opencode-kit:start/.test(readFileSync(agentsPath, "utf8")));
+  writeFileSync(agentsPath, "# House rules\n\nDo not touch.\n\n" + readFileSync(agentsPath, "utf8"));
+  run([project]);
+  check("user content preserved", /Do not touch\./.test(readFileSync(agentsPath, "utf8")));
+  writeFileSync(agentsPath, readFileSync(agentsPath, "utf8").replace(/v\d+\.\d+\.\d+/, "v0.0.0"));
+  result = run([project, "--check"]);
+  check("stale block reported", result.status === 1 && /stale: AGENTS\.md/.test(result.stdout), result.stdout);
+  run([project]);
+
   console.log("--check on clean tree");
   result = run([project, "--check"]);
   check("exit 0", result.status === 0, result.stdout + result.stderr);
@@ -86,6 +97,13 @@ try {
   result = run([project, "--dry-run"]);
   check("exit 0", result.status === 0, result.stderr);
   check("file untouched", readFileSync(join(project, ".opencode", "agent", "worker.md"), "utf8") === before);
+
+  console.log("--no-agents-md");
+  const bare = join(sandbox, "bare");
+  mkdirSync(bare, { recursive: true });
+  result = run([bare, "--no-agents-md"]);
+  check("exit 0", result.status === 0, result.stderr);
+  check("AGENTS.md not created", !existsSync(join(bare, "AGENTS.md")));
 
   console.log("--help and --version");
   check("help exits 0", run(["--help"]).status === 0);

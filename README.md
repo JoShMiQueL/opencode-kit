@@ -132,6 +132,9 @@ To verify a project matches the kit (exit code `1` when it does not):
 npx -y github:JoShMiQueL/opencode-kit ~/dev/my-project --check
 ```
 
+This also checks the `AGENTS.md` block: if it is missing or was written by an
+older version, `--check` reports it as drift.
+
 If the kit ever removes or renames a managed file, `--prune` deletes it from
 the project — but only files recorded in the installer manifest, never your
 own agents:
@@ -153,12 +156,19 @@ Full option list: `npx -y github:JoShMiQueL/opencode-kit --help`.
 │   ├── plans/            created empty — phased plans live here
 │   ├── reports/          created empty — long outputs live here
 │   └── .opencode-kit.json   installer manifest (what was installed)
+├── AGENTS.md             one managed block appended; the rest is yours
 └── opencode.json         default_agent, model, small_model merged in
 ```
 
-The installer manages **only** `.opencode/agent/*.md`, `.opencode/command/*.md`
-and those three keys in `opencode.json`. Providers, MCP servers, plugins,
-credentials and your own agents are left untouched.
+The installer manages **only** `.opencode/agent/*.md`, `.opencode/command/*.md`,
+those three keys in `opencode.json`, and one delimited block in `AGENTS.md`.
+Providers, MCP servers, plugins, credentials and your own agents are left
+untouched.
+
+The `AGENTS.md` block matters: opencode injects `AGENTS.md` into every session,
+so it tells **any** agent — not just the orchestrator — that the agents are
+kit-owned, which lanes are free, and how to sync. It is refreshed on every run,
+so it always reflects the installed version. Use `--no-agents-md` to skip it.
 
 ## Lanes
 
@@ -228,8 +238,8 @@ status is a signal to investigate, not to retry blindly.
 | `.opencode/command/*.md` | Overwritten — kit-owned |
 | `.opencode/.opencode-kit.json` | Rewritten — the manifest |
 | `opencode.json` | Three keys merged; everything else preserved |
+| `AGENTS.md` | Kit block refreshed between markers; everything else preserved |
 | `.opencode/plans/`, `.opencode/reports/` | Untouched |
-| `AGENTS.md` (project root) | Untouched |
 | Any other file | Untouched |
 
 `--prune` only removes files listed in the manifest. A custom agent you added

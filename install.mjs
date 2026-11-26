@@ -44,6 +44,8 @@ Options
   -n, --dry-run   Show what would change, write nothing
       --prune     Remove files the kit installed before but no longer ships
       --check     Report drift against the kit; exit 1 when out of sync
+      --no-agents-md
+                  Skip the managed opencode-kit block in AGENTS.md
   -h, --help      Show this help
   -v, --version   Print the version
 
@@ -51,6 +53,7 @@ What it manages
   .opencode/agent/*.md          agents
   .opencode/command/*.md        slash commands
   opencode.json                 default_agent, model, small_model only
+  AGENTS.md                     one delimited block, rest untouched
 
 Safety
   A manifest at .opencode/${MANIFEST_NAME} records every installed file.
@@ -67,7 +70,7 @@ function fail(message, code = 1) {
 // ---------------------------------------------------------------- arguments
 
 function parseArgs(argv) {
-  const opts = { target: ".", dryRun: false, prune: false, check: false };
+  const opts = { target: ".", dryRun: false, prune: false, check: false, noAgentsMd: false };
   for (const arg of argv) {
     if (arg === "-h" || arg === "--help") {
       console.log(HELP);
@@ -81,6 +84,8 @@ function parseArgs(argv) {
       opts.prune = true;
     } else if (arg === "--check") {
       opts.check = true;
+    } else if (arg === "--no-agents-md") {
+      opts.noAgentsMd = true;
     } else if (arg.startsWith("-")) {
       fail(`unknown option: ${arg}\nRun with --help for usage.`);
     } else if (opts.target !== ".") {
@@ -103,6 +108,44 @@ const normalize = (buffer) => buffer.toString("utf8").replace(/\r\n/g, "\n");
 const hashBuffer = (buffer) => createHash("sha256").update(normalize(buffer)).digest("hex");
 
 const hashFile = (path) => hashBuffer(readFileSync(path));
+
+// ----------------------------------------------------------- AGENTS.md block
+
+const BLOCK_START = "<!-- opencode-kit:start";
+const BLOCK_END = "<!-- opencode-kit:end -->";
+
+function agentsBlock(version) {
+  return `<!-- opencode-kit:start (managed by opencode-kit v${version} — run the installer to refresh) -->
+## opencode-kit
+
+This project runs [opencode-kit](https://github.com/JoShMiQueL/opencode-kit). Agents live in \`.opencode/agent/\`, commands in \`.opencode/command/\` — both are kit-owned copies. Edit the kit, never these files.
+
+- Models come from the \`opencode-devin\` plugin (\`devin/*\`): no API keys, no local proxy.
+- Lanes (all free): planner \`swe-2-1#low\` · worker/reviewer \`swe-2#high\` · orchestrator \`swe-2#medium\` · scout/librarian/tester \`swe-2#low\`.
+- Spend expensive lanes last: delegate to low/medium lanes first, escalate only on a concrete failure.
+- Sync: \`npx -y github:JoShMiQueL/opencode-kit .\` — \`--check\` reports drift, \`--prune\` removes retired files.
+- Project-specific agents must use a different filename (e.g. \`worker-<project>.md\`) so a sync never overwrites them.
+<!-- opencode-kit:end -->`;
+}
+
+function extractBlock(text) {
+  const start = text.indexOf(BLOCK_START);
+  if (start === -1) return null;
+  const end = text.indexOf(BLOCK_END, start);
+  if (end === -1) return null;
+  return text.slice(start, end + BLOCK_END.length);
+}
+
+function mergeAgentsMd(existing, version) {
+  const block = agentsBlock(version);
+  if (!existing) return block + "\n";
+  const start = existing.indexOf(BLOCK_START);
+  const end = existing.indexOf(BLOCK_END);
+  if (start !== -1 && end !== -1 && end > start) {
+    return existing.slice(0, start) + block + existing.slice(end + BLOCK_END.length);
+  }
+  return existing.replace(/\s*$/, "") + "\n\n" + block + "\n";
+}
 
 // ------------------------------------------------------------------- state
 
@@ -191,6 +234,15 @@ if (opts.check) {
     }
   }
 
+  if (!opts.noAgentsMd) {
+    const agentsPath = join(TARGET, "AGENTS.md");
+    if (!existsSync(agentsPath)) {
+      problems.push("missing: AGENTS.md kit block");
+    } else if (extractBlock(readFileSync(agentsPath, "utf8")) !== agentsBlock(pkg.version)) {
+      problems.push("stale: AGENTS.md kit block");
+    }
+  }
+
   if (problems.length === 0) {
     console.log(`in sync: ${TARGET} (v${previous.version ?? "?"})`);
     process.exit(0);
@@ -251,6 +303,18 @@ if (cfg === null) {
   if (changed) {
     log(`update ${cfgPath}`);
     if (!opts.dryRun) writeFileSync(cfgPath, JSON.stringify(next, null, 2) + "\n", "utf8");
+  }
+}
+
+// ---- AGENTS.md managed block ----------------------------------------------
+
+if (!opts.noAgentsMd) {
+  const agentsPath = join(TARGET, "AGENTS.md");
+  const current = existsSync(agentsPath) ? readFileSync(agentsPath, "utf8") : "";
+  const next = mergeAgentsMd(current, pkg.version);
+  if (next !== current) {
+    log(`update ${agentsPath}`);
+    if (!opts.dryRun) writeFileSync(agentsPath, next, "utf8");
   }
 }
 

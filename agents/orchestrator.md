@@ -123,6 +123,18 @@ already condenses them.
   into `AGENTS.md` at the project root (≤50 lines). Create it only
   when durable state exists; single-session work leaves no memory.
 
+## Kit maintenance
+
+This project runs opencode-kit. The agents and commands in `.opencode/` are
+kit-owned copies — never edit them in place; change the kit and re-sync.
+
+- Drift check: `npx -y github:JoShMiQueL/opencode-kit . --check`
+- Sync: `npx -y github:JoShMiQueL/opencode-kit .`
+- Retired files: add `--prune`
+
+If a request is about the kit itself, delegate to `worker` and treat the kit
+repository as the source of truth.
+
 ## Language
 
 Conversational replies in Spanish; prompts, reports and file contents
