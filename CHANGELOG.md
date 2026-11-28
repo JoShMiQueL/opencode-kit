@@ -1,16 +1,5 @@
 # Changelog
 
-## [1.4.0] - 2026-11-27
-
-### Fixed
-- Lane map corrected against the live catalog: `swe-2#low` removed (swe-2
-  has no low lane — scout/tester/librarian now on `swe-2#medium`),
-  orchestrator moved to `swe-2-1#low` per the routing rule
-  (swe-2-1 = orchestrator/planner only, at its real minimum effort).
-- Swe lanes only — non-swe vendor references purged.
-- Rate-limit symptom documented: swe-2-1 bare closes the stream empty
-  under load (~2 min reset, not a bug).
-
 All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/).
@@ -21,13 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Lane map corrected against the live model catalog: `swe-2#low` never existed
   (swe-2 has medium|high|max only) — scout/tester/librarian moved to
   `swe-2#medium`, the cheapest real swe-2 lane.
-- `swe-2-1` is now restricted to orchestrator + planner at `low` effort —
-  never a worker/subagent lane. Swe lanes only; non-swe vendor lanes removed
-  from the routing docs.
-- Delegation is now the documented default: escalate to a high lane only on
-  a concrete failure or a task provably beyond the cheap lane.
-- Documented the swe-2-1 free-tier rate-limit symptom (upstream closes the
-  stream empty in <1s, resets in ~2 min) so it is not mistaken for a bug.
+- `swe-2-1` restricted to orchestrator + planner at `low` effort — never a
+  worker/subagent lane. Swe lanes only; non-swe vendor references removed.
+- Delegation documented as the default: escalate to a high lane only on a
+  concrete failure or a task provably beyond the cheap lane.
+- swe-2-1 free-tier rate-limit symptom documented (upstream closes the
+  stream empty in <1s, resets in ~2 min — not a bug).
 
 ## [Unreleased]
 
