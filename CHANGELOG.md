@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
 ## [1.4.0] - 2026-11-27
 
 ### Fixed
@@ -16,8 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   concrete failure or a task provably beyond the cheap lane.
 - swe-2-1 free-tier rate-limit symptom documented (upstream closes the
   stream empty in <1s, resets in ~2 min — not a bug).
-
-## [Unreleased]
 
 ## [1.3.0] - 2026-11-26
 
